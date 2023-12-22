@@ -33,16 +33,19 @@ namespace Data.EntityConfigs
                 {
                     Id = 1,
                     Name = "Team 1",
+                    CoachId = 1
                 },
                 new Team()
                 {
                     Id = 2,
                     Name = "Team 2",
+                    CoachId = 2
                 },
                 new Team()
                 {
                     Id = 3,
                     Name = "Team 3",
+                    CoachId = 3
                 }
             );
         }
