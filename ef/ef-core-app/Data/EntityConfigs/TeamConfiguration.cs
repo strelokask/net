@@ -13,7 +13,20 @@ namespace Data.EntityConfigs
     {
         public void Configure(EntityTypeBuilder<Team> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.HasIndex(x => x.Name)
+                .IsUnique();
+
+            builder.HasMany(x => x.HomeMatches)
+                .WithOne(x => x.HomeTeam)
+                .HasForeignKey(x => x.HomeTeamId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(x => x.AwayMatches)
+                .WithOne(x => x.AwayTeam)
+                .HasForeignKey(x => x.AwayTeamId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasData(
                 new Team()

@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 
 namespace Data.EntityConfigs
 {
-    public class CoachConfiguration : IEntityTypeConfiguration<Coach>
+    internal class CoachConfiguration : IEntityTypeConfiguration<Coach>
     {
         public void Configure(EntityTypeBuilder<Coach> builder)
         {
-            builder.HasKey(x => x.Id);
-
             builder.HasData(
                 new Coach()
                 {
