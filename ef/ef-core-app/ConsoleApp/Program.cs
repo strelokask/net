@@ -1,11 +1,26 @@
 ﻿
 using Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 using var context = new FootballLeageDbContext();
 
-await GetAllTeams();
+#region Raw SQL
+async Task FromSqlRaw()
+{
+    Console.WriteLine("Enter name: ");
+    var teamName = Console.ReadLine();
+    var teamNameParam = new SqlParameter("teamName", teamName);
+    var team = context.Teams.FromSqlRaw($"SELECT * FROM Teams WHERE name = @teamNameParam", teamNameParam);
+}
+async Task FromView()
+{
+    var details = await context.vw_TeamsAndLeagues.ToListAsync();
+}
+#endregion
+
+//await GetAllTeams();
 
 void MeasureQuery<T>(Func<List<T>> measureQuery)
 {

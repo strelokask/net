@@ -11,17 +11,22 @@ namespace Data
 {
     public class FootballLeageDbContext: DbContext
     {
-
         public DbSet<Team> Teams {  get; set; }
         public DbSet<Coach> Coaches { get; set; }
         public DbSet<League> Leagues { get; set; }
         public DbSet<Match> Matches { get; set; }
+        public DbSet<vw_TeamsAndLeagues> vw_TeamsAndLeagues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            modelBuilder.Entity<vw_TeamsAndLeagues>()
+                .HasNoKey()
+                .ToView(nameof(vw_TeamsAndLeagues))
+                ;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
