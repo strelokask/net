@@ -11,6 +11,10 @@ namespace Data
 {
     public class FootballLeageDbContext: DbContext
     {
+        public FootballLeageDbContext(DbContextOptions<FootballLeageDbContext> options): base(options)
+        {
+            
+        }
         public DbSet<Team> Teams {  get; set; }
         public DbSet<Coach> Coaches { get; set; }
         public DbSet<League> Leagues { get; set; }
@@ -28,15 +32,15 @@ namespace Data
                 .ToView(nameof(vw_TeamsAndLeagues))
                 ;
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder
-                .UseSqlServer("Data Source=localhost; Initial Catalog=FootballLeageEFCoreApp; User Id=sa;Password=1qaz!QAZ;Integrated Security=True;TrustServerCertificate=True;")
-                .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information)
-                //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors()
-                ;
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder
+        //        .UseSqlServer("Data Source=localhost; Initial Catalog=FootballLeageEFCoreApp; User Id=sa;Password=1qaz!QAZ;Integrated Security=True;TrustServerCertificate=True;")
+        //        .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information)
+        //        //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+        //        .EnableSensitiveDataLogging()
+        //        .EnableDetailedErrors()
+        //        ;
+        //}
     }
 }
