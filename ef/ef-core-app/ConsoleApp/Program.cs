@@ -1,11 +1,26 @@
 ﻿
 using Data;
+using Infrastructure.Extensions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 
-using var context = new FootballLeageDbContext();
+#region test query
 
+var builder = new ConfigurationBuilder().AddJsonFile($"appsettings.json", true, true);
+IConfiguration configuration = builder.Build();
+
+var services = new ServiceCollection();
+
+services.AddSqlDbContext(configuration);
+
+var serviceProvider = services.BuildServiceProvider();
+
+using var context = serviceProvider.GetService<FootballLeageDbContext>();
+
+await GetAllTeams();
 #region Raw SQL
 async Task FromSqlRaw()
 {
@@ -73,3 +88,10 @@ async Task GetAllTeams()
     //);
 }
 
+#endregion
+
+#region test 2
+
+
+
+#endregion

@@ -1,7 +1,6 @@
 using Data;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,21 +13,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
 
-builder.Services.AddDbContext<FootballLeageDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("SqlDatabaseConnectionString");
-    options.UseSqlServer(connectionString)
-        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-        ;
+builder.Services.AddSqlDbContext(builder.Configuration);
 
-    if (builder.Environment.IsDevelopment())
-    {
-        options.LogTo(Console.WriteLine, LogLevel.Information);
-
-        options.EnableDetailedErrors();
-        options.EnableSensitiveDataLogging();
-    }
-});
+builder.Services.AddMapsterConfiguration();
 
 
 var app = builder.Build();
