@@ -7,20 +7,23 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 
-#region test query
 
-var builder = new ConfigurationBuilder().AddJsonFile($"appsettings.json", true, true);
+var builder = new ConfigurationBuilder()
+    .AddJsonFile($"appsettings.json", false, true)
+    .AddJsonFile($"appsettings.Local.json", true, true);
 IConfiguration configuration = builder.Build();
 
 var services = new ServiceCollection();
 
 services.AddSqlDbContext(configuration);
 
-var serviceProvider = services.BuildServiceProvider();
+using var serviceProvider = services.BuildServiceProvider();
 
 using var context = serviceProvider.GetService<FootballLeageDbContext>();
 
-await GetAllTeams();
+#region test query
+
+//await GetAllTeams();
 #region Raw SQL
 async Task FromSqlRaw()
 {
@@ -92,6 +95,8 @@ async Task GetAllTeams()
 
 #region test 2
 
-
+var firstTeam = context.Teams.AsTracking().First(x => x.Id == 1);
+firstTeam.Name = "Team-updated" + DateTimeOffset.UtcNow.ToString();
+context.SaveChanges();
 
 #endregion

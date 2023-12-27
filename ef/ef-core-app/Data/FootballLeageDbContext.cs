@@ -32,6 +32,22 @@ namespace Data
                 .ToView(nameof(vw_TeamsAndLeagues))
                 ;
         }
+        public override int SaveChanges()
+        {
+            TrackUpdatedEntities();
+            return base.SaveChanges();
+        }
+        void TrackUpdatedEntities()
+        {
+            var newEntries = ChangeTracker.Entries<BaseEntity>()
+                .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
+            var currentDateTime = DateTimeOffset.Now;
+            foreach (var entry in newEntries)
+            {
+                entry.Entity.CreatedDate = currentDateTime;
+                entry.Entity.LastModifiedDate = currentDateTime;
+            }
+        }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    optionsBuilder
