@@ -44,8 +44,12 @@ namespace Data
             var currentDateTime = DateTimeOffset.Now;
             foreach (var entry in newEntries)
             {
-                entry.Entity.CreatedDate = currentDateTime;
                 entry.Entity.LastModifiedDate = currentDateTime;
+
+                if(entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedDate = currentDateTime;
+                }
             }
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
