@@ -41,7 +41,9 @@ namespace Data
         {
             var newEntries = ChangeTracker.Entries<BaseEntity>()
                 .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
-            var currentDateTime = DateTimeOffset.Now;
+            
+            var currentDateTime = DateTimeOffset.UtcNow;
+
             foreach (var entry in newEntries)
             {
                 entry.Entity.LastModifiedDate = currentDateTime;
