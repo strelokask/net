@@ -1,5 +1,6 @@
 ﻿
 using Data;
+using Domain;
 using Infrastructure.Extensions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -95,8 +96,52 @@ async Task GetAllTeams()
 
 #region test 2
 
-var firstTeam = context.Teams.AsTracking().First(x => x.Id == 1);
-firstTeam.Name = "Team-updated" + DateTimeOffset.UtcNow.ToString();
-context.SaveChanges();
+void TestSaveChanges()
+{
+    var firstTeam = context.Teams.AsTracking().First(x => x.Id == 1);
+    firstTeam.Name = "Team-updated" + DateTimeOffset.UtcNow.ToString();
+    context.SaveChanges();
+}
+
+void TestTransaction()
+{
+    var transaction = context.Database.BeginTransaction();
+    var league = new League
+    {
+        Name = "Test transaction"
+    };
+
+    context.Add(league);
+    context.SaveChanges();
+
+    var coach = new Coach
+    {
+        Name = "Transaction coach"
+    };
+    context.Add(coach);
+    context.SaveChanges();
+
+    var teams = new List<Team>
+    {
+        new Team
+        {
+            Name = "Transaction team 1",
+            LeagueId = league.Id,
+            CoachId = coach.Id
+        }
+    };
+    context.AddRange(teams);
+    context.SaveChanges();
+
+    try
+    {
+        transaction.Commit();
+    }
+    catch (Exception)
+    {
+        transaction.Rollback();
+        throw;
+    }
+}
 
 #endregion
