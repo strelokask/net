@@ -1,17 +1,19 @@
 ﻿namespace TasksLab;
-
+/// <summary>
+/// Возможность отмены Task, через определенное время
+/// </summary>
 public class TaskCancel
 {
     public static async Task Run()
     {
-        var cts = new CancellationTokenSource();
-        var task = Task.Run(() => ProcessCts(cancellationToken: cts.Token));
-    
-        Task.Delay(2000).GetAwaiter().GetResult();
-        cts.Cancel();
         try
         {
-            await task;
+            var cts = new CancellationTokenSource();
+            var task = ProcessCts(cancellationToken: cts.Token);
+            // var task = Task.Run(() => ProcessCts(cancellationToken: cts.Token));
+            await Task.Delay(2000);
+            cts.Cancel();
+            //await task;
         }
         catch (OperationCanceledException)
         {
